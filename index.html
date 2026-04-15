@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de inventario del laboratorio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div>
+                <p class="eyebrow">Laboratorio de quimica</p>
+                <h1>Inventario con alertas preventivas</h1>
+                <p class="hero-copy">Controla reactivos y materiales, registra cada movimiento con usuario y fecha, y detecta faltantes antes de cancelar una practica.</p>
+            </div>
+
+            <form class="user-panel" id="user-form">
+                <label for="current-user">Usuario activo</label>
+                <div class="user-panel-row">
+                    <input id="current-user" name="currentUser" type="text" placeholder="Ej. Mtra. Rivera" maxlength="80" required>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+                <p class="helper-text">El usuario activo se adjunta a las altas y a todos los movimientos del inventario.</p>
+            </form>
+        </header>
+
+        <section class="summary-grid" id="summary-grid">
+            <article class="summary-card">
+                <span class="summary-label">Materiales</span>
+                <strong id="summary-total">0</strong>
+            </article>
+            <article class="summary-card warning">
+                <span class="summary-label">Stock bajo</span>
+                <strong id="summary-low">0</strong>
+            </article>
+            <article class="summary-card danger">
+                <span class="summary-label">Sin existencia</span>
+                <strong id="summary-zero">0</strong>
+            </article>
+            <article class="summary-card neutral">
+                <span class="summary-label">Movimientos hoy</span>
+                <strong id="summary-today">0</strong>
+            </article>
+        </section>
+
+        <section class="status-banner" id="status-banner" aria-live="polite"></section>
+
+        <section class="main-grid">
+            <article class="panel panel-alerts">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Monitoreo</p>
+                        <h2>Alertas activas</h2>
+                    </div>
+                    <span class="pill pill-danger" id="alert-counter">0 alertas</span>
+                </div>
+                <div class="alerts-list" id="alerts-list"></div>
+            </article>
+
+            <article class="panel panel-form">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Catalogo</p>
+                        <h2 id="material-form-title">Registrar material o reactivo</h2>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-button" hidden>Cancelar edicion</button>
+                </div>
+
+                <form id="material-form" class="form-grid">
+                    <input type="hidden" id="material-id" name="id">
+
+                    <label>
+                        Nombre
+                        <input type="text" id="material-name" name="name" maxlength="120" required>
+                    </label>
+
+                    <label>
+                        Categoria
+                        <input type="text" id="material-category" name="category" maxlength="60" placeholder="Reactivo, vidrio, equipo menor">
+                    </label>
+
+                    <label>
+                        Unidad
+                        <input type="text" id="material-unit" name="unit" maxlength="20" placeholder="L, mL, g, piezas" required>
+                    </label>
+
+                    <label>
+                        Stock minimo
+                        <input type="number" id="material-min-stock" name="minStock" min="0" step="0.01" required>
+                    </label>
+
+                    <label class="full-span initial-quantity-field" id="initial-quantity-field">
+                        Cantidad inicial
+                        <input type="number" id="material-initial-quantity" name="initialQuantity" min="0" step="0.01" value="0" required>
+                        <span class="helper-text">La cantidad inicial se registra como un movimiento de alta.</span>
+                    </label>
+
+                    <label>
+                        Ubicacion
+                        <input type="text" id="material-location" name="location" maxlength="80" placeholder="Almacen A / Anaquel 2">
+                    </label>
+
+                    <label>
+                        Caducidad
+                        <input type="date" id="material-expiration-date" name="expirationDate">
+                    </label>
+
+                    <label class="full-span">
+                        Observaciones
+                        <textarea id="material-notes" name="notes" rows="3" maxlength="240" placeholder="Pureza, presentacion, lote, cuidados"></textarea>
+                    </label>
+
+                    <div class="form-actions full-span">
+                        <button type="submit" class="btn btn-primary" id="material-submit-button">Guardar material</button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="panel panel-form">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Trazabilidad</p>
+                        <h2>Registrar movimiento</h2>
+                    </div>
+                </div>
+
+                <form id="movement-form" class="form-grid compact">
+                    <label class="full-span">
+                        Material
+                        <select id="movement-material-id" name="materialId" required></select>
+                    </label>
+
+                    <label>
+                        Tipo
+                        <select id="movement-type" name="type" required>
+                            <option value="entrada">Entrada</option>
+                            <option value="salida">Salida</option>
+                            <option value="ajuste_positivo">Ajuste positivo</option>
+                            <option value="ajuste_negativo">Ajuste negativo</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Cantidad
+                        <input type="number" id="movement-quantity" name="quantity" min="0.01" step="0.01" required>
+                    </label>
+
+                    <label class="full-span">
+                        Motivo
+                        <input type="text" id="movement-reason" name="reason" maxlength="140" placeholder="Consumo de practica, reposicion, ajuste por conteo" required>
+                    </label>
+
+                    <div class="form-actions full-span">
+                        <button type="submit" class="btn btn-primary">Registrar movimiento</button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="panel panel-table panel-wide">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Existencias</p>
+                        <h2>Inventario actual</h2>
+                    </div>
+                    <label class="search-field" for="inventory-search">
+                        <span>Buscar</span>
+                        <input type="search" id="inventory-search" placeholder="Nombre, categoria, ubicacion">
+                    </label>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Categoria</th>
+                                <th>Existencia</th>
+                                <th>Minimo</th>
+                                <th>Ubicacion</th>
+                                <th>Caducidad</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body"></tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="panel panel-table panel-wide">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Bitacora</p>
+                        <h2>Historial de movimientos</h2>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Material</th>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Antes</th>
+                                <th>Despues</th>
+                                <th>Motivo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body"></tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+    </div>
+
+    <template id="empty-state-template">
+        <div class="empty-state">
+            <h3>No hay datos para mostrar</h3>
+            <p>Agrega materiales y registra movimientos para empezar a controlar el inventario del laboratorio.</p>
+        </div>
+    </template>
+
+    <script type="module" src="./laboratorio.js/app.js"></script>
+</body>
+</html>

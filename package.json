@@ -1,0 +1,19 @@
+{
+  "name": "inventario-laboratorio",
+  "version": "1.0.0",
+  "description": "Sistema web para control de inventario de materiales y reactivos de laboratorio.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "inventario",
+    "laboratorio",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

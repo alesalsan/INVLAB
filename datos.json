@@ -1,0 +1,94 @@
+{
+  "materials": [
+    {
+      "id": "70c39b0f-da15-475b-8f58-03120e869017",
+      "name": "ácido clorhídrico",
+      "normalizedName": "acido clorhidrico",
+      "category": "reactivo",
+      "unit": "L",
+      "minStock": 10,
+      "location": "a1",
+      "expirationDate": "2026-05-27",
+      "notes": "en galones de 5 L",
+      "quantity": 20,
+      "createdAt": "2026-03-27T18:59:09.951Z",
+      "updatedAt": "2026-03-27T18:59:49.607Z"
+    },
+    {
+      "id": "f3e4c112-d744-42e9-88f0-856f795673c2",
+      "name": "matraz",
+      "normalizedName": "matraz",
+      "category": "vidrio",
+      "unit": "piezas",
+      "minStock": 20,
+      "location": "a2",
+      "expirationDate": "2027-07-15",
+      "notes": "vidrio",
+      "quantity": 23,
+      "createdAt": "2026-03-27T19:01:16.861Z",
+      "updatedAt": "2026-03-27T19:01:50.333Z"
+    }
+  ],
+  "movements": [
+    {
+      "id": "76ef9c76-c89d-414e-b075-a1b11ef69be4",
+      "materialId": "f3e4c112-d744-42e9-88f0-856f795673c2",
+      "materialName": "matraz",
+      "type": "salida",
+      "typeLabel": "Salida",
+      "quantity": 2,
+      "delta": -2,
+      "previousQuantity": 25,
+      "newQuantity": 23,
+      "unit": "piezas",
+      "user": "alejandro",
+      "reason": "rotos",
+      "createdAt": "2026-03-27T19:01:50.333Z"
+    },
+    {
+      "id": "ac3e67d3-a2f5-4b8a-87f7-58de66a9682e",
+      "materialId": "f3e4c112-d744-42e9-88f0-856f795673c2",
+      "materialName": "matraz",
+      "type": "alta",
+      "typeLabel": "Alta inicial",
+      "quantity": 25,
+      "delta": 25,
+      "previousQuantity": 0,
+      "newQuantity": 25,
+      "unit": "piezas",
+      "user": "alejandro",
+      "reason": "Alta inicial del material",
+      "createdAt": "2026-03-27T19:01:16.861Z"
+    },
+    {
+      "id": "78dfbb32-3383-4e43-b867-5fb9b5e8c238",
+      "materialId": "70c39b0f-da15-475b-8f58-03120e869017",
+      "materialName": "ácido clorhídrico",
+      "type": "entrada",
+      "typeLabel": "Entrada",
+      "quantity": 15,
+      "delta": 15,
+      "previousQuantity": 5,
+      "newQuantity": 20,
+      "unit": "L",
+      "user": "alejandro",
+      "reason": "reposición",
+      "createdAt": "2026-03-27T18:59:49.607Z"
+    },
+    {
+      "id": "368bb13a-563c-452e-974f-e0f6b08d4718",
+      "materialId": "70c39b0f-da15-475b-8f58-03120e869017",
+      "materialName": "ácido clorhídrico",
+      "type": "alta",
+      "typeLabel": "Alta inicial",
+      "quantity": 5,
+      "delta": 5,
+      "previousQuantity": 0,
+      "newQuantity": 5,
+      "unit": "L",
+      "user": "alejandro",
+      "reason": "Alta inicial del material",
+      "createdAt": "2026-03-27T18:59:09.951Z"
+    }
+  ]
+}
